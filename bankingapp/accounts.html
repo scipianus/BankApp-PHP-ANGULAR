@@ -1,0 +1,67 @@
+<div class="row">
+    <div class="col s12">
+        <h4>Accounts</h4>
+        <!-- used for searching the current list -->
+        <input type="text" ng-model="search" class="form-control" placeholder="Search account..." />
+        <!-- table that shows account record list -->
+        <table class="hoverable bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>IBAN</th>
+                    <th>Type</th>
+                    <th>Currency</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody ng-init="getAll()">
+                <tr ng-repeat="a in accounts | filter:search">
+                    <td>{{ a.id }}</td>
+                    <td>{{ a.iban }}</td>
+                    <td>{{ typeMap[a.type] }}</td>
+                    <td ng-bind-html="currencyMap[a.currency]"></td>
+                    <td>{{ a.amount | number }}</td>
+                    <td> <a ng-click="editAccount(a.id)" class="waves-effect waves-light btn"><i class="material-icons left">edit</i>Edit</a> <a ng-click="deleteAccount(a.id)" class="waves-effect waves-light btn"><i class="material-icons left">delete</i>Delete</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- modal for creating a new account -->
+        <div id="modal-account-form" class="modal">
+            <div class="modal-content">
+                <h4 id="modal-account-title">Create New Account</h4>
+                <div class="input-field col s12">
+                    <input ng-model="iban" type="text" class="validate" placeholder="Type IBAN here..." />
+                    <label for="iban">IBAN</label>
+                </div>
+                <div class="input-field col s12">
+                    <select ng-model="type" class="validate">
+                        <option value="" disabled selected>Choose account type</option>
+                        <option value="checking">Checking</option>
+                        <option value="savings">Savings</option>
+                    </select>
+                    <label for="type">Type</label>
+                </div>
+                <div class="input-field col s12">
+                    <select ng-model="currency" class="validate">
+                        <option value="" disabled selected>Choose account currency</option>
+                        <option value="euro">&euro;</option>
+                        <option value="dollar">$</option>
+                        <option value="pound">&pound;</option>
+                        <option value="yen">&yen;</option>
+                    </select>
+                    <label for="currency">Currency</label>
+                </div>
+                <div class="input-field col s12">
+                    <input ng-model="amount" type="text" class="validate" placeholder="Type amount here..." />
+                    <label for="amount">Amount</label>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12"> <a id="btn-create-account" class="waves-effect waves-light btn margin-bottom-1em" ng-click="createAccount()"><i class="material-icons left">add</i>Create</a> <a id="btn-update-account" class="waves-effect waves-light btn margin-bottom-1em" ng-click="updateAccount()"><i class="material-icons left">edit</i>Save Changes</a> <a class="modal-action modal-close waves-effect waves-light btn margin-bottom-1em"><i class="material-icons left">close</i>Close</a> </div>
+                </div>
+            </div>
+        </div>
+        <!-- floating button for creating account -->
+        <div class="fixed-action-btn" style="bottom:45px; right:24px;"> <a class="waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-account-form" ng-click="showAccountCreateForm()"><i class="large material-icons">add</i></a> </div>
+        <!-- back button --><a ng-click="goBack()" class="waves-effect waves-light btn"><i class="material-icons left"></i>Back</a> </div>
+</div>
