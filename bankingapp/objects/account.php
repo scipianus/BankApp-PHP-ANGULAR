@@ -31,6 +31,25 @@ class Account
         return $stmt;
     }
     
+    function readOne()
+    {
+        // query to read single record
+        $query = "SELECT iban, type, currency, amount FROM " . $this->table_name . " WHERE id = :id LIMIT 0,1";
+        // prepare query statement
+        $stmt = $this->conn->prepare( $query );
+        // bind id of account to be updated
+        $stmt->bindParam(":id", $this->id);
+        // execute query
+        $stmt->execute();
+        // get retrieved row
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // set values to object properties
+        $this->iban = $row['iban'];
+        $this->type = $row['type'];
+        $this->currency = $row['currency'];
+        $this->amount = $row['amount'];
+    }
+    
     function create()
     {
         // query to insert record
@@ -51,6 +70,42 @@ class Account
             echo "<pre>";
                 print_r($stmt->errorInfo());
             echo "</pre>";
+            return false;
+        }
+    }
+    
+    function update()
+    {
+        // query to update record
+        $query = "UPDATE " . $this->table_name . " SET iban=:iban, type=:type, currency=:currency, amount=:amount WHERE id=:id";
+        // prepare query
+        $stmt = $this->conn->prepare($query);
+        // bind values
+        $stmt->bindParam(":id", $this->id);
+        $stmt->bindParam(":iban", $this->iban);
+        $stmt->bindParam(":type", $this->type);
+        $stmt->bindParam(":currency", $this->currency);
+        $stmt->bindParam(":amount", $this->amount);
+        // execute query
+        if($stmt->execute()) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+    
+    function delete() 
+    {
+        // delete query
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+        // bind id of record to delete
+        $stmt->bindParam(':id', $this->id);
+        // execute the query
+        if($stmt->execute()){
+            return true;
+        }else{
             return false;
         }
     }

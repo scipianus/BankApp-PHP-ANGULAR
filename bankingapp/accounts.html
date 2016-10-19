@@ -35,20 +35,14 @@
                     <label for="iban">IBAN</label>
                 </div>
                 <div class="input-field col s12">
-                    <select ng-model="type" class="validate">
+                    <select ng-model="type" class="validate" ng-options="t.value as t.label for t in typesArray">
                         <option value="" disabled selected>Choose account type</option>
-                        <option value="checking">Checking</option>
-                        <option value="savings">Savings</option>
                     </select>
                     <label for="type">Type</label>
                 </div>
                 <div class="input-field col s12">
-                    <select ng-model="currency" class="validate">
+                    <select ng-model="currency" class="validate" ng-options="c.value as c.label for c in currencyArray">
                         <option value="" disabled selected>Choose account currency</option>
-                        <option value="euro">&euro;</option>
-                        <option value="dollar">$</option>
-                        <option value="pound">&pound;</option>
-                        <option value="yen">&yen;</option>
                     </select>
                     <label for="currency">Currency</label>
                 </div>

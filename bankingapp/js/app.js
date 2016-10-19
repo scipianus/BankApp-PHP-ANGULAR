@@ -55,12 +55,40 @@ app.controller('clientsCtrl', function ($scope, $http, $state) {
 });
 app.controller('accountsCtrl', function ($scope, $http, $state, $stateParams) {
     $scope.clientId = $stateParams.clientId;
+    $scope.currencyArray = [
+        {
+            value: "euro"
+            , label: "&euro;"
+        }
+        , {
+            value: "dollar"
+            , label: "$"
+        }
+        , {
+            value: "pound"
+            , label: "&pound;"
+        }
+        , {
+            value: "yen"
+            , label: "&yen;"
+        }
+    , ];
     $scope.currencyMap = {
         "euro": "&euro;"
         , "dollar": "$"
         , "pound": "&pound;"
         , "yen": "&yen;"
     };
+    $scope.typesArray = [
+        {
+            value: "checking"
+            , label: "Checking"
+        }
+        , {
+            value: "savings"
+            , label: "Savings"
+        }
+    , ];
     $scope.typeMap = {
         "checking": "Checking"
         , "savings": "Savings"
@@ -78,7 +106,12 @@ app.controller('accountsCtrl', function ($scope, $http, $state, $stateParams) {
         // open modal
         $('#modal-account-form').openModal();
     }
-    $scope.clearForm = function () {}
+    $scope.clearForm = function () {
+        $scope.iban = "";
+        $scope.type = "";
+        $scope.currency = "";
+        $scope.amount = "";
+    }
     $scope.getAll = function () {
         $http.get("read_accounts.php", {
             params: {
@@ -111,6 +144,7 @@ app.controller('accountsCtrl', function ($scope, $http, $state, $stateParams) {
         });
     }
     $scope.editAccount = function (id) {
+        $('select').material_select();
         // change modal title
         $('#modal-account-title').text("Edit Account");
         // show udpate account button
@@ -132,5 +166,37 @@ app.controller('accountsCtrl', function ($scope, $http, $state, $stateParams) {
         }).error(function (data, status, headers, config) {
             Materialize.toast('Unable to retrieve record.', 4000);
         });
+    }
+    $scope.updateAccount = function () {
+        $http.post('update_account.php', {
+            'id': $scope.id
+            , 'iban': $scope.iban
+            , 'type': $scope.type
+            , 'currency': $scope.currency
+            , 'amount': $scope.amount
+        }).success(function (data, status, headers, config) {
+            // tell the user account record was updated
+            Materialize.toast(data, 4000);
+            // close modal
+            $('#modal-account-form').closeModal();
+            // clear modal content
+            $scope.clearForm();
+            // refresh the accounts list
+            $scope.getAll();
+        });
+    }
+    $scope.deleteAccount = function (id) {
+        // ask the user if he is sure to delete the record
+        if (confirm("Are you sure?")) {
+            // post the id of account to be deleted
+            $http.post('delete_account.php', {
+                'id': id
+            }).success(function (data, status, headers, config) {
+                // tell the user account was deleted
+                Materialize.toast(data, 4000);
+                // refresh the accounts list
+                $scope.getAll();
+            });
+        }
     }
 });
