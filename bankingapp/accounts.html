@@ -41,8 +41,12 @@
                     <label for="type">Type</label>
                 </div>
                 <div class="input-field col s12">
-                    <select ng-model="currency" class="validate" ng-options="c.value as c.label for c in currencyArray">
+                    <select ng-model="currency" class="validate">
                         <option value="" disabled selected>Choose account currency</option>
+                        <option value="euro">&euro;</option>
+                        <option value="dollar">$</option>
+                        <option value="pound">&pound;</option>
+                        <option value="yen">&yen;</option>
                     </select>
                     <label for="currency">Currency</label>
                 </div>

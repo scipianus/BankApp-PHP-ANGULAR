@@ -55,24 +55,6 @@ app.controller('clientsCtrl', function ($scope, $http, $state) {
 });
 app.controller('accountsCtrl', function ($scope, $http, $state, $stateParams) {
     $scope.clientId = $stateParams.clientId;
-    $scope.currencyArray = [
-        {
-            value: "euro"
-            , label: "&euro;"
-        }
-        , {
-            value: "dollar"
-            , label: "$"
-        }
-        , {
-            value: "pound"
-            , label: "&pound;"
-        }
-        , {
-            value: "yen"
-            , label: "&yen;"
-        }
-    , ];
     $scope.currencyMap = {
         "euro": "&euro;"
         , "dollar": "$"
